@@ -1,0 +1,73 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>GaitMate</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,500;6..72,600&family=Public+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/styles.css">
+  </head>
+  <body>
+    <main class="page">
+      <header class="topbar">
+        <div class="brand">
+          <span class="brand-mark">G</span>
+          <span class="brand-name">GaitMate</span>
+        </div>
+        <div class="sensor-status">
+          <span class="sensor-dot"></span>
+          <span data-health-status>Checking backend</span>
+        </div>
+      </header>
+
+      <section class="container narrow">
+        <h1 class="headline">Welcome to GaitMate</h1>
+        <p class="lede">A local demo dashboard for ankle ligament strain, guided recovery exercises, and fall tracking from biosensor CSV data.</p>
+
+        <div class="tile-grid">
+          <a class="card tile" href="sprain.html">
+            <div class="tile-media">
+              <img src="assets/ankle-ligaments.png" alt="Ankle ligament diagram">
+            </div>
+            <div class="tile-title-row">
+              <div>
+                <strong>Track Sprain</strong>
+                <div class="subtle" style="font-size:13px;">Ligament strain</div>
+              </div>
+              <span aria-hidden="true">→</span>
+            </div>
+          </a>
+
+          <a class="card tile" href="exercises.html">
+            <div class="tile-media pattern">
+              <span class="kicker">Recovery plan</span>
+            </div>
+            <div class="tile-title-row">
+              <div>
+                <strong>Current Exercises</strong>
+                <div class="subtle" style="font-size:13px;">3 for today</div>
+              </div>
+              <span aria-hidden="true">→</span>
+            </div>
+          </a>
+
+          <a class="card tile" href="falls.html">
+            <div class="tile-media pattern">
+              <span class="kicker">Fall log</span>
+            </div>
+            <div class="tile-title-row">
+              <div>
+                <strong>Fall Tracking</strong>
+                <div class="subtle" style="font-size:13px;">No recent falls</div>
+              </div>
+              <span aria-hidden="true">→</span>
+            </div>
+          </a>
+        </div>
+      </section>
+    </main>
+    <script type="module" src="js/main.js"></script>
+  </body>
+</html>

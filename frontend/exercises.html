@@ -1,0 +1,71 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1">
+    <title>Exercises | GaitMate</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Newsreader:opsz,wght@6..72,500;6..72,600&family=Public+Sans:wght@400;500;600;700;800&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="css/styles.css">
+  </head>
+  <body>
+    <main class="page">
+      <header class="topbar">
+        <div class="brand">
+          <a class="back-link" href="index.html">← Home</a>
+          <span class="divider"></span>
+          <span class="page-title">Current Exercises</span>
+        </div>
+      </header>
+
+      <section class="container narrow">
+        <div class="row-between" style="margin-bottom:20px;">
+          <div>
+            <div class="kicker">Today</div>
+            <h1 style="margin:5px 0 0; font-size:30px;">Recovery plan</h1>
+          </div>
+          <button class="secondary-button">Day</button>
+        </div>
+
+        <section class="card panel" style="margin-bottom:20px;">
+          <div class="row-between">
+            <div>
+              <div class="kicker">Live ankle strain</div>
+              <div style="margin-top:7px;">
+                <span style="font-family:'Newsreader',serif; font-size:40px; font-weight:600;" data-live-value>--</span>
+                <span class="subtle">/ 100 index</span>
+              </div>
+            </div>
+            <span class="pill" data-live-label>Loading</span>
+          </div>
+          <div class="progress" style="margin-top:16px; color:#2a8a5f;">
+            <span data-live-bar style="width:0"></span>
+          </div>
+        </section>
+
+        <section class="exercise-grid">
+          <article class="card exercise-card">
+            <div class="kicker">Prescribed</div>
+            <h2>Seated ankle alphabet</h2>
+            <p class="subtle">Trace letters slowly with the foot while keeping the knee still.</p>
+            <strong>2 sets · A-Z</strong>
+          </article>
+          <article class="card exercise-card">
+            <div class="kicker">Recommended</div>
+            <h2>Band eversion</h2>
+            <p class="subtle">Move the foot outward against light resistance without pain.</p>
+            <strong>3 sets · 10 reps</strong>
+          </article>
+          <article class="card exercise-card">
+            <div class="kicker">Mobility</div>
+            <h2>Heel raises</h2>
+            <p class="subtle">Rise evenly through both feet and lower with control.</p>
+            <strong>2 sets · 12 reps</strong>
+          </article>
+        </section>
+      </section>
+    </main>
+    <script type="module" src="js/exercises.js"></script>
+  </body>
+</html>
