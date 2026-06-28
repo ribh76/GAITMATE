@@ -1,21 +1,30 @@
-import { getLatestRisk } from "./api.js";
-import { tintForColor } from "./risk.js";
+document.querySelectorAll(".set-toggle").forEach((button) => {
+  button.addEventListener("click", () => {
+    button.classList.toggle("is-complete");
+    button.setAttribute("aria-pressed", String(button.classList.contains("is-complete")));
+  });
+});
 
-const liveValue = document.querySelector("[data-live-value]");
-const liveLabel = document.querySelector("[data-live-label]");
-const liveBar = document.querySelector("[data-live-bar]");
+document.querySelectorAll(".exercise-row").forEach((row) => {
+  const ratingButtons = row.querySelectorAll("[data-rating]");
 
-if (liveValue && liveLabel && liveBar) {
-  getLatestRisk()
-    .then(({ overall }) => {
-      liveValue.textContent = overall.score;
-      liveLabel.textContent = overall.label;
-      liveLabel.style.color = overall.color;
-      liveLabel.style.background = tintForColor(overall.color);
-      liveBar.style.width = `${overall.score}%`;
-      liveBar.style.color = overall.color;
-    })
-    .catch(() => {
-      liveLabel.textContent = "Backend offline";
+  ratingButtons.forEach((button) => {
+    button.addEventListener("click", () => {
+      const selected = Number(button.dataset.rating);
+      ratingButtons.forEach((item) => {
+        const isSelected = Number(item.dataset.rating) === selected;
+        item.classList.toggle("is-selected", isSelected);
+        item.setAttribute("aria-pressed", String(isSelected));
+      });
     });
-}
+  });
+
+  const textarea = row.querySelector(".feedback-text");
+  const counter = row.querySelector("[data-count]");
+
+  if (textarea && counter) {
+    textarea.addEventListener("input", () => {
+      counter.textContent = `${textarea.value.length}/300`;
+    });
+  }
+});

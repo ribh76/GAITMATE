@@ -8,6 +8,6 @@ if (status) {
       status.textContent = "Live · sensor connected";
     })
     .catch(() => {
-      status.textContent = "Demo · backend offline";
+      status.textContent = "Sensor connection unavailable";
     });
 }

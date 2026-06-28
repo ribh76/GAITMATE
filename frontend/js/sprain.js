@@ -22,6 +22,54 @@ const details = {
   },
 };
 
+const DEMO_STATES = {
+  healthy: {
+    time: "demo healthy",
+    ligaments: {
+      ATFL: demoLigament(18, "#2a8a5f", 1, "Low Risk", "Within healthy range. Keep up the good work!"),
+      CFL: demoLigament(20, "#2a8a5f", 1, "Low Risk", "Within healthy range. Keep up the good work!"),
+      PTFL: demoLigament(16, "#2a8a5f", 1, "Low Risk", "Within healthy range. Keep up the good work!"),
+    },
+    overall: {
+      level: 1,
+      score: 20,
+      label: "Healthy",
+      color: "#2a8a5f",
+      source: "Demo",
+    },
+  },
+  moderate: {
+    time: "demo moderate",
+    ligaments: {
+      ATFL: demoLigament(56, "#d9a32a", 3, "Moderate Risk", "Keep monitoring and reduce high-impact movement."),
+      CFL: demoLigament(52, "#d9a32a", 3, "Moderate Risk", "Keep monitoring and reduce high-impact movement."),
+      PTFL: demoLigament(58, "#d9a32a", 3, "Moderate Risk", "Keep monitoring and reduce high-impact movement."),
+    },
+    overall: {
+      level: 3,
+      score: 55,
+      label: "Monitor",
+      color: "#d9a32a",
+      source: "Demo",
+    },
+  },
+  highRisk: {
+    time: "demo high risk",
+    ligaments: {
+      ATFL: demoLigament(88, "#d65a4a", 5, "High Risk", "Reduce load and contact your clinician if symptoms persist."),
+      CFL: demoLigament(84, "#d65a4a", 5, "High Risk", "Reduce load and contact your clinician if symptoms persist."),
+      PTFL: demoLigament(86, "#d65a4a", 5, "High Risk", "Reduce load and contact your clinician if symptoms persist."),
+    },
+    overall: {
+      level: 5,
+      score: 85,
+      label: "High Risk",
+      color: "#d65a4a",
+      source: "Demo",
+    },
+  },
+};
+
 const status = document.querySelector("[data-status]");
 const pins = document.querySelector("[data-pins]");
 const list = document.querySelector("[data-ligaments]");
@@ -30,9 +78,37 @@ const overallScore = document.querySelector("[data-overall-score]");
 const overallLabel = document.querySelector("[data-overall-label]");
 const overallNote = document.querySelector("[data-overall-note]");
 const marker = document.querySelector("[data-scale-marker]");
+const demoButtons = document.querySelectorAll("[data-demo-state]");
+
+let sensorPayload = null;
+let demoState = null;
+
+function demoLigament(score, color, level, label, advice) {
+  return {
+    average_strain: Math.round(score / 10),
+    max_strain: Math.round(score / 8),
+    gradient: level,
+    variability: Number((level * 0.22).toFixed(2)),
+    duration: Number((level * 0.2).toFixed(1)),
+    loading: Number((score / 10).toFixed(1)),
+    risk: {
+      level,
+      label,
+      color,
+      advice,
+      score,
+    },
+  };
+}
 
 function formatNumber(value) {
   return Number(value || 0).toFixed(2).replace(/\.00$/, "");
+}
+
+function setActiveDemoButton(nextState) {
+  demoButtons.forEach((button) => {
+    button.classList.toggle("is-active", button.dataset.demoState === nextState);
+  });
 }
 
 function renderPin(abbr, metric) {
@@ -81,7 +157,9 @@ function render(payload) {
   const color = overall.color || "#2a8a5f";
   const score = Math.min(100, Math.max(0, Math.round(overall.score || 0)));
 
-  reading.textContent = `Last CSV reading: time ${payload.time}`;
+  reading.textContent = demoState
+    ? `Selected strain state: ${overall.label}.`
+    : `Latest sensor reading: time ${payload.time}`;
   pins.innerHTML = Object.entries(ligaments).map(([abbr, metric]) => renderPin(abbr, metric)).join("");
   list.innerHTML = Object.entries(ligaments).map(([abbr, metric]) => renderCard(abbr, metric)).join("");
   overallScore.textContent = `${score}`;
@@ -89,19 +167,33 @@ function render(payload) {
   overallLabel.textContent = overall.label || scoreToFallbackLabel(score);
   overallLabel.style.color = color;
   overallLabel.style.background = tintForColor(color);
-  const sourceText = overall.source ? ` CSV overall: ${overall.source}.` : "";
-  overallNote.textContent = `Current guidance: ${Object.values(ligaments)
-    .sort((a, b) => b.risk.level - a.risk.level)[0]?.risk.advice || "Within healthy range."}`;
-  overallNote.textContent += sourceText;
+  const highestRisk = Object.values(ligaments).sort((a, b) => b.risk.level - a.risk.level)[0]?.risk;
+  const guidance = highestRisk?.level === 1
+    ? "Within healthy range. Keep up the good work!"
+    : highestRisk?.advice || "Within healthy range. Keep up the good work!";
+  overallNote.textContent = `Current guidance: ${guidance}`;
   overallNote.style.background = tintForColor(color);
   marker.style.left = `${score}%`;
   marker.style.borderColor = color;
-  status.textContent = "Live · sensor connected";
+  status.textContent = demoState ? "Viewing selected strain state" : "Live · sensor connected";
 }
 
+demoButtons.forEach((button) => {
+  button.addEventListener("click", () => {
+    demoState = button.dataset.demoState;
+    setActiveDemoButton(demoState);
+    render(DEMO_STATES[demoState]);
+  });
+});
+
 getLatestLigamentData()
-  .then(render)
+  .then((payload) => {
+    sensorPayload = payload;
+    if (!demoState) {
+      render(sensorPayload);
+    }
+  })
   .catch((error) => {
-    status.textContent = "Demo · backend offline";
+    status.textContent = "Sensor connection unavailable";
     list.innerHTML = `<p class="status-message error">${error.message}</p>`;
   });

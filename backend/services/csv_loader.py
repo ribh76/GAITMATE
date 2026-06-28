@@ -53,15 +53,17 @@ def get_row_by_time(time_value):
     return _row_to_dict(matches.iloc[0])
 
 
+sample_number = 0
+
 def get_ligament_metrics(row):
     ligaments = {}
     for ligament in LIGAMENTS:
-        average = row.get(f"{ligament} Average Strain", 0)
-        max_strain = row.get(f"{ligament} Max Strain", 0)
-        gradient = row.get(f"{ligament} Gradient", 0)
-        variability = row.get(f"{ligament} Variability", 0)
-        duration = row.get(f"{ligament} Duration", 0)
-        loading = row.get(f"{ligament} Loading", 0)
+        average = row.get(f"{ligament} Average Strain",sample_number)
+        max_strain = row.get(f"{ligament} Max Strain", sample_number)
+        gradient = row.get(f"{ligament} Gradient", sample_number)
+        variability = row.get(f"{ligament} Variability", sample_number)
+        duration = row.get(f"{ligament} Duration", sample_number)
+        loading = row.get(f"{ligament} Loading", sample_number)
         ligaments[ligament] = {
             "average_strain": average,
             "max_strain": max_strain,

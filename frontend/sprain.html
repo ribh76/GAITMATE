@@ -24,7 +24,16 @@
       </header>
 
       <section class="container">
-        <p class="status-message" data-reading>Loading latest CSV reading...</p>
+        <p class="status-message" data-reading></p>
+
+        <section class="demo-controls" aria-label="Demo strain state">
+          <span class="kicker">Demo strain state</span>
+          <div class="demo-button-group">
+            <button class="demo-button" type="button" data-demo-state="healthy">Low Risk</button>
+            <button class="demo-button" type="button" data-demo-state="moderate">Moderate Risk</button>
+            <button class="demo-button" type="button" data-demo-state="highRisk">High Risk</button>
+          </div>
+        </section>
 
         <div class="dashboard-grid">
           <section class="card panel">
@@ -69,8 +78,12 @@
             <span>50 · Monitor</span>
             <span>100 · See clinician</span>
           </div>
-          <p class="note" data-overall-note>Waiting for backend guidance.</p>
+          <p class="note" data-overall-note>Waiting for guidance.</p>
         </section>
+
+        <div class="center-actions">
+          <a class="primary-button" href="contact.html">Contact Physician</a>
+        </div>
       </section>
     </main>
     <script type="module" src="js/sprain.js"></script>
