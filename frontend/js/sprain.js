@@ -68,6 +68,8 @@ function renderCard(abbr, metric) {
         <span>Max ${formatNumber(metric.max_strain)}%</span>
         <span>Gradient ${formatNumber(metric.gradient)}</span>
         <span>Variability ${formatNumber(metric.variability)}</span>
+        <span>Duration ${formatNumber(metric.duration)}</span>
+        <span>Loading ${formatNumber(metric.loading)}</span>
       </div>
     </article>
   `;
@@ -87,8 +89,10 @@ function render(payload) {
   overallLabel.textContent = overall.label || scoreToFallbackLabel(score);
   overallLabel.style.color = color;
   overallLabel.style.background = tintForColor(color);
+  const sourceText = overall.source ? ` CSV overall: ${overall.source}.` : "";
   overallNote.textContent = `Current guidance: ${Object.values(ligaments)
     .sort((a, b) => b.risk.level - a.risk.level)[0]?.risk.advice || "Within healthy range."}`;
+  overallNote.textContent += sourceText;
   overallNote.style.background = tintForColor(color);
   marker.style.left = `${score}%`;
   marker.style.borderColor = color;

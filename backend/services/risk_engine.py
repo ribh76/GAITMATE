@@ -32,6 +32,46 @@ RISK_LEVELS = {
 }
 
 
+OVERALL_LEVELS = {
+    "GREEN": {
+        "level": 1,
+        "score": 18,
+        "label": "Healthy",
+        "color": "#2a8a5f",
+    },
+    "GREEN-YELLOW": {
+        "level": 2,
+        "score": 34,
+        "label": "Low-Medium",
+        "color": "#8fbf4f",
+    },
+    "GREEN YELLOW": {
+        "level": 2,
+        "score": 34,
+        "label": "Low-Medium",
+        "color": "#8fbf4f",
+    },
+    "YELLOW": {
+        "level": 3,
+        "score": 54,
+        "label": "Monitor",
+        "color": "#d9a32a",
+    },
+    "ORANGE": {
+        "level": 4,
+        "score": 74,
+        "label": "Elevated",
+        "color": "#e08a4a",
+    },
+    "RED": {
+        "level": 5,
+        "score": 92,
+        "label": "High",
+        "color": "#d65a4a",
+    },
+}
+
+
 def calculate_risk(max_strain, gradient, variability):
     max_strain = float(max_strain or 0)
     gradient = float(gradient or 0)
@@ -51,13 +91,36 @@ def calculate_risk(max_strain, gradient, variability):
     return {"level": level, **RISK_LEVELS[level]}
 
 
-def calculate_overall(ligaments):
+def _label_for_score(score):
+    if score >= 85:
+        return {"level": 5, "label": "High", "color": RISK_LEVELS[5]["color"]}
+    if score >= 65:
+        return {"level": 4, "label": "Elevated", "color": RISK_LEVELS[4]["color"]}
+    if score >= 45:
+        return {"level": 3, "label": "Monitor", "color": RISK_LEVELS[3]["color"]}
+    if score >= 25:
+        return {"level": 2, "label": "Low-Medium", "color": RISK_LEVELS[2]["color"]}
+    return {"level": 1, "label": "Healthy", "color": RISK_LEVELS[1]["color"]}
+
+
+def calculate_overall(ligaments, overall_value=None):
+    if overall_value is not None:
+        try:
+            score = round(float(overall_value))
+            score = max(0, min(100, score))
+            return {"score": score, "source": overall_value, **_label_for_score(score)}
+        except (TypeError, ValueError):
+            key = str(overall_value).strip().upper()
+            if key in OVERALL_LEVELS:
+                return {"source": overall_value, **OVERALL_LEVELS[key]}
+
     if not ligaments:
         return {
             "level": 1,
             "score": 0,
             "label": "Healthy",
             "color": RISK_LEVELS[1]["color"],
+            "source": overall_value,
         }
 
     levels = [item["risk"]["level"] for item in ligaments.values()]
@@ -79,4 +142,5 @@ def calculate_overall(ligaments):
         "score": score,
         "label": label,
         "color": RISK_LEVELS[level]["color"],
+        "source": overall_value,
     }

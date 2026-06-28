@@ -60,11 +60,15 @@ def get_ligament_metrics(row):
         max_strain = row.get(f"{ligament} Max Strain", 0)
         gradient = row.get(f"{ligament} Gradient", 0)
         variability = row.get(f"{ligament} Variability", 0)
+        duration = row.get(f"{ligament} Duration", 0)
+        loading = row.get(f"{ligament} Loading", 0)
         ligaments[ligament] = {
             "average_strain": average,
             "max_strain": max_strain,
             "gradient": gradient,
             "variability": variability,
+            "duration": duration,
+            "loading": loading,
             "risk": calculate_risk(max_strain, gradient, variability),
         }
     return ligaments
@@ -78,5 +82,5 @@ def get_latest_ligament_payload():
     return {
         "time": row.get("Time"),
         "ligaments": ligaments,
-        "overall": calculate_overall(ligaments),
+        "overall": calculate_overall(ligaments, row.get("Overall")),
     }
