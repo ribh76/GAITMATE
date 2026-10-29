@@ -3,7 +3,7 @@ from pathlib import Path
 
 import pandas as pd
 
-from services.risk_engine import calculate_overall, calculate_risk
+from V1_reference.backend.services.risk_engine import calculate_overall, calculate_risk
 
 
 DATA_FILE = Path(__file__).resolve().parents[1] / "data" / "biosensor-data.csv"

@@ -1,7 +1,7 @@
 from flask import Flask, jsonify
 from flask_cors import CORS
 
-from routes.sensor_routes import sensor_bp
+from V1_reference.backend.routes.sensor_routes import sensor_bp
 
 
 def create_app():

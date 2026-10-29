@@ -1,12 +1,12 @@
 from flask import Blueprint
 
-from services.csv_loader import (
+from V1_reference.backend.services.csv_loader import (
     get_all_rows,
     get_latest_ligament_payload,
     get_latest_row,
     get_row_by_time,
 )
-from utils.response_helpers import not_found, ok, server_error
+from V1_reference.backend.utils.response_helpers import not_found, ok, server_error
 
 
 sensor_bp = Blueprint("sensor", __name__)
